@@ -101,7 +101,7 @@ class MainWindow(QMainWindow):
         # Initialize undo history
         self.history = []
         self.history_index = -1
-        self.max_history = 30  # Maximum undo steps
+        self.max_history = 3000  # Maximum undo steps
 
         # Store erased regions
         self.erased_regions = []
@@ -189,12 +189,12 @@ class MainWindow(QMainWindow):
         pre_smooth_layout.addWidget(pre_smooth_explanation, 0, 0)
 
         self.pre_smooth = QSlider(Qt.Horizontal)
-        self.pre_smooth.setRange(1, 21)
+        self.pre_smooth.setRange(11, 21)
         self.pre_smooth.setValue(1)
         self.pre_smooth.valueChanged.connect(self.update_edge_detection)
         pre_smooth_layout.addWidget(self.pre_smooth, 1, 0)
 
-        self.pre_smooth_label = QLabel("1")
+        self.pre_smooth_label = QLabel("11")
         self.pre_smooth.valueChanged.connect(
             lambda v: self.pre_smooth_label.setText(str(v)))
         pre_smooth_layout.addWidget(self.pre_smooth_label, 1, 1)
@@ -215,11 +215,11 @@ class MainWindow(QMainWindow):
 
         self.threshold = QSlider(Qt.Horizontal)
         self.threshold.setRange(0, 255)
-        self.threshold.setValue(128)
+        self.threshold.setValue(46)
         self.threshold.valueChanged.connect(self.update_edge_detection)
         threshold_layout.addWidget(self.threshold, 1, 0)
 
-        self.threshold_label = QLabel("128")
+        self.threshold_label = QLabel("46")
         self.threshold.valueChanged.connect(
             lambda v: self.threshold_label.setText(str(v)))
         threshold_layout.addWidget(self.threshold_label, 1, 1)
@@ -240,11 +240,11 @@ class MainWindow(QMainWindow):
 
         self.morph_size = QSlider(Qt.Horizontal)
         self.morph_size.setRange(1, 50)
-        self.morph_size.setValue(20)
+        self.morph_size.setValue(9)
         self.morph_size.valueChanged.connect(self.update_edge_detection)
         morph_layout.addWidget(self.morph_size, 1, 0)
 
-        self.morph_size_label = QLabel("20")
+        self.morph_size_label = QLabel("9")
         self.morph_size.valueChanged.connect(
             lambda v: self.morph_size_label.setText(str(v)))
         morph_layout.addWidget(self.morph_size_label, 1, 1)
@@ -265,11 +265,11 @@ class MainWindow(QMainWindow):
 
         self.post_smooth = QSlider(Qt.Horizontal)
         self.post_smooth.setRange(1, 21)
-        self.post_smooth.setValue(1)
+        self.post_smooth.setValue(4)
         self.post_smooth.valueChanged.connect(self.update_edge_detection)
         post_smooth_layout.addWidget(self.post_smooth, 1, 0)
 
-        self.post_smooth_label = QLabel("1")
+        self.post_smooth_label = QLabel("4")
         self.post_smooth.valueChanged.connect(
             lambda v: self.post_smooth_label.setText(str(v)))
         post_smooth_layout.addWidget(self.post_smooth_label, 1, 1)
