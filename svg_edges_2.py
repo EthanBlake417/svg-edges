@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QLabel, QVBoxLayout,
                                QGraphicsView, QGraphicsScene, QSlider, QScrollArea,
                                QGridLayout, QGroupBox, QCheckBox)
 from PySide6.QtCore import Qt, QRectF, QPointF
-from PySide6.QtGui import QPixmap, QImage, QPainter, QMouseEvent, QShortcut, QKeySequence
+from PySide6.QtGui import QPixmap, QImage, QPainter, QMouseEvent, QShortcut, QKeySequence, QColor
 from PySide6.QtSvg import QSvgGenerator
 
 
@@ -519,16 +519,36 @@ class MainWindow(QMainWindow):
             file_name, _ = QFileDialog.getSaveFileName(self, "Save SVG File",
                                                        "", "SVG files (*.svg)")
             if file_name:
+                # Get the current pixmap
+                pixmap = self.image_label.pixmap()
+
+                # Convert pixmap to QImage for pixel manipulation
+                image = pixmap.toImage()
+
+                # Create a transparent image of the same size
+                transparent_image = QImage(image.size(), QImage.Format_ARGB32)
+                transparent_image.fill(Qt.transparent)
+
+                # Copy non-white pixels from original image
+                for x in range(image.width()):
+                    for y in range(image.height()):
+                        pixel_color = QColor(image.pixel(x, y))
+                        # Check if pixel is not white (allowing for some tolerance)
+                        if (pixel_color.red() < 250 or
+                                pixel_color.green() < 250 or
+                                pixel_color.blue() < 250):
+                            transparent_image.setPixel(x, y, image.pixel(x, y))
+
                 # Create SVG generator
                 generator = QSvgGenerator()
                 generator.setFileName(file_name)
-                generator.setSize(self.image_label.pixmap().size())
-                generator.setViewBox(self.image_label.pixmap().rect())
+                generator.setSize(transparent_image.size())
+                generator.setViewBox(transparent_image.rect())
 
                 # Create painter and draw
                 painter = QPainter()
                 painter.begin(generator)
-                painter.drawPixmap(0, 0, self.image_label.pixmap())
+                painter.drawImage(0, 0, transparent_image)
                 painter.end()
 
 
